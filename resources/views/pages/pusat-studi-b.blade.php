@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Pusat Studi Gender dan Anak – LPPM STAIMAS Wonogiri')
 @section('hero-title', 'Pusat Studi Gender & Anak')

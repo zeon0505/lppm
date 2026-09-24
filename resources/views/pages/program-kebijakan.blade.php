@@ -1,4 +1,4 @@
-﻿<style>
+<style>
 .pg-wrap { max-width: 860px; margin: 0 auto; padding: 40px 20px; }
 .pg-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; margin-bottom: 24px; }
 .pg-card-head { padding: 18px 28px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 10px; }

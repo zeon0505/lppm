@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Pusat Studi Moderasi Beragama – LPPM STAIMAS Wonogiri')
 @section('hero-title', 'Pusat Studi Moderasi Beragama')

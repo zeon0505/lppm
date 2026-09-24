@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', ($page->title ?? 'Halaman') . ' – LPPM STAIMAS Wonogiri')
 @section('hero-title', $page->title ?? 'LPPM STAIMAS')

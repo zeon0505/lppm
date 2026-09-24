@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Dokumentasi Kegiatan – LPPM STAIMAS Wonogiri')
 @section('hero-title', 'Dokumentasi Kegiatan')
