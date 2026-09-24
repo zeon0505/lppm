@@ -15,7 +15,7 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
   
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
+    html, body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0 !important; padding: 0 !important; }
 
     /* ===== GLOBAL ANIMATIONS FOR ALL PAGES ===== */
     .reveal {
@@ -179,7 +179,7 @@
         <a href="https://staimaswonogiri.ecampuz.com/eadmisi/" target="_blank" class="bg-amber-500 text-slate-950 px-3 py-1 rounded font-bold hover:bg-amber-600 transition-colors"><i class="fas fa-user-plus mr-1"></i> PMB 2026</a>
         <a href="https://staimaswonogiri.ecampuz.com/eakademikportal/" target="_blank" class="hover:text-amber-400 transition-colors font-semibold">SIAKAD</a>
         <a href="https://e-journal.staimaswonogiri.ac.id/" target="_blank" class="hover:text-amber-400 transition-colors font-semibold">E-Journal</a>
-        <a href="{{ route('admin.login') }}" class="hover:text-amber-300 font-bold bg-white/10 px-2.5 py-0.5 rounded transition-colors ml-1"><i class="fas fa-lock mr-1 text-[9px]"></i> Admin</a>
+
       </div>
     </div>
   </div>
@@ -424,3 +424,4 @@
 
 </body>
 </html>
+

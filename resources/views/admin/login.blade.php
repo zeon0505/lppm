@@ -273,11 +273,11 @@
       
       <!-- Email Field -->
       <div class="form-group">
-        <label class="form-label">Email Address</label>
+        <label class="form-label">Email</label>
         <div class="input-wrapper">
           <i class="fas fa-envelope input-icon"></i>
           <input type="email" name="email" value="{{ old('email') }}" required autofocus 
-                 class="form-input" placeholder="admin@staimaswonogiri.ac.id">
+                 class="form-input" placeholder="Email">
         </div>
       </div>
 
@@ -335,3 +335,4 @@
 
 </body>
 </html>
+
