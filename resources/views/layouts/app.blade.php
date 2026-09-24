@@ -83,6 +83,7 @@
       visibility: visible;
       transform: translateY(0);
     }
+    .nav > a, nav > .nav-dropdown > button { white-space: nowrap !important; font-size: 13px !important; font-weight: 600 !important; }
     .nav-dropdown-menu a {
       display: block;
       padding: 10px 18px;
@@ -194,7 +195,7 @@
       </a>
 
       <!-- Desktop Nav (Optimal Spacing & Typography) -->
-      <nav class="hidden lg:flex items-center gap-6 xl:gap-8 text-[13px] font-semibold text-slate-700 tracking-normal">
+      <nav class="hidden lg:flex items-center gap-4 xl:gap-7 text-xs xl:text-[13px] font-semibold text-slate-700 tracking-normal whitespace-nowrap">
         
         <a href="{{ route('home') }}" class="px-2.5 py-2 transition-colors hover:text-[#074e50] uppercase rounded-lg hover:bg-slate-50">
           BERANDA
