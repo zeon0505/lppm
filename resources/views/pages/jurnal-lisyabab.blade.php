@@ -38,9 +38,7 @@
         <p style="margin: 0 0 16px 0; color: #64748b; font-size: 13px;">
           Pengelola Publikasi Ilmiah & E-Journal LPPM STAIMAS Wonogiri
         </p>
-        <a href="{{ asset('assest/SK TIM JURNAL.pdf') }}" download target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: #d97706; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 13px; text-decoration: none; box-shadow: 0 3px 8px rgba(217,119,6,0.25);">
-          <i class="fas fa-file-download"></i> Download SK Pengelola
-        </a>
+
       </div>
     </div>
   </div>
@@ -111,3 +109,4 @@
 
 </div>
 @endsection
+
