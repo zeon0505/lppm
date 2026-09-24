@@ -167,7 +167,7 @@
       <div class="train-row-wrap">
         <div class="train-header">
           <h3>
-            <i class="fas fa-camera"></i> Baris {{ $rowIndex + 1 }} ({{ $rowPhotos->count() }} Foto Asli)
+            <i class="fas fa-camera"></i> Dokumentasi
           </h3>
           <div style="display: flex; align-items: center; gap: 10px;">
             <span style="font-size: 11px; font-weight: 700; color: #64748b; background: #f1f5f9; padding: 4px 12px; border-radius: 9999px;" class="hidden sm:inline-block">
