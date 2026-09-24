@@ -10,12 +10,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Seeder Admin
+        // Seeder Admin Rumit & Aman
         User::updateOrCreate(
-            ['email' => 'admin@staimaswonogiri.ac.id'],
+            ['email' => 'admin.lppm.auth2026@staimaswonogiri.ac.id'],
             [
-                'name' => 'Admin LPPM',
-                'password' => Hash::make('admin123'),
+                'name' => 'Administrator LPPM STAIMAS',
+                'password' => Hash::make('LppmStaimas2026#SecureAdmin!'),
             ]
         );
 
