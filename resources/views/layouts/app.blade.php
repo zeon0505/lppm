@@ -6,6 +6,7 @@
   <title>@yield('title', 'LPPM') – Sekolah Tinggi Agama Islam Mulia Astuti (STAIMAS) Wonogiri</title>
   <meta name="description" content="Lembaga Penelitian dan Pengabdian kepada Masyarakat (LPPM) STAIMAS Wonogiri – Pusat penelitian, publikasi jurnal, dan pengabdian masyarakat." />
   <link rel="icon" type="image/png" href="https://www.staimaswonogiri.ac.id/assest/LOGO%20STAIMAS%20AI.png" />
+  @stack('og-tags')
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -251,6 +252,7 @@
             <a href="{{ route('jurnal-al-basirah') }}"><i class="fas fa-book mr-2 text-teal-600"></i> Jurnal Al-Basirah</a>
             <a href="{{ route('jurnal-lisyabab') }}"><i class="fas fa-feather-alt mr-2 text-amber-600"></i> Jurnal Li Syabab</a>
             <a href="{{ route('ketua-jurnal-lppm') }}"><i class="fas fa-user-shield mr-2 text-indigo-600"></i> Ketua Jurnal LPPM</a>
+            <a href="{{ route('berita') }}"><i class="fas fa-newspaper mr-2 text-rose-500"></i> Berita & Pengumuman</a>
           </div>
         </div>
 
@@ -306,6 +308,7 @@
           <a href="{{ route('jurnal-al-basirah') }}" class="block py-1.5 text-xs font-semibold text-slate-600">Jurnal Al-Basirah</a>
           <a href="{{ route('jurnal-lisyabab') }}" class="block py-1.5 text-xs font-semibold text-slate-600">Jurnal Li Syabab</a>
           <a href="{{ route('ketua-jurnal-lppm') }}" class="block py-1.5 text-xs font-semibold text-slate-600">Ketua Jurnal LPPM</a>
+          <a href="{{ route('berita') }}" class="block py-1.5 text-xs font-semibold text-slate-600">Berita & Pengumuman</a>
         </div>
       </div>
     </div>

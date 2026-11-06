@@ -163,6 +163,12 @@
           <i class="fas fa-camera"></i>
           <span>Kelola Dokumentasi</span>
         </a>
+
+        <!-- Kelola Berita -->
+        <a href="{{ route('admin.berita.index') }}" class="sidebar-nav-item {{ Route::is('admin.berita.*') ? 'active' : '' }}">
+          <i class="fas fa-newspaper"></i>
+          <span>Kelola Berita</span>
+        </a>
       </div>
 
       <!-- PENGATURAN & AKSES -->

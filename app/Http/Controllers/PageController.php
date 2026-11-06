@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Dokumen;
 use App\Models\Dokumentasi;
+use App\Models\Berita;
 
 class PageController extends Controller
 {
@@ -58,4 +59,32 @@ class PageController extends Controller
     public function ketuaJurnal() { return view('pages.ketua-jurnal-lppm'); }
     public function jurnalAlBasirah() { return view('pages.jurnal-al-basirah'); }
     public function jurnalLisyabab() { return view('pages.jurnal-lisyabab'); }
+
+    public function beritaIndex()
+    {
+        $beritas = Berita::where('published', true)->latest('tanggal')->paginate(9);
+        return view('pages.berita', compact('beritas'));
+    }
+
+    public function beritaShow($slug)
+    {
+        $berita  = Berita::where('slug', $slug)->where('published', true)->firstOrFail();
+        $lainnya = Berita::where('published', true)->where('id', '!=', $berita->id)->latest('tanggal')->take(5)->get();
+
+        $prev = Berita::where('published', true)
+            ->where('tanggal', '<', $berita->tanggal)
+            ->orWhere(function($q) use ($berita) {
+                $q->where('tanggal', $berita->tanggal)->where('id', '<', $berita->id);
+            })
+            ->latest('tanggal')->first();
+
+        $next = Berita::where('published', true)
+            ->where('tanggal', '>', $berita->tanggal)
+            ->orWhere(function($q) use ($berita) {
+                $q->where('tanggal', $berita->tanggal)->where('id', '>', $berita->id);
+            })
+            ->oldest('tanggal')->first();
+
+        return view('pages.berita-detail', compact('berita', 'lainnya', 'prev', 'next'));
+    }
 }

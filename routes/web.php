@@ -26,6 +26,10 @@ Route::get('/dokumentasi',       [PageController::class, 'dokumentasi'])->name('
 Route::get('/jurnal-al-basirah', [PageController::class, 'jurnalAlBasirah'])->name('jurnal-al-basirah');
 Route::get('/jurnal-lisyabab',   [PageController::class, 'jurnalLisyabab'])->name('jurnal-lisyabab');
 
+// Berita
+Route::get('/berita',            [PageController::class, 'beritaIndex'])->name('berita');
+Route::get('/berita/{slug}',     [PageController::class, 'beritaShow'])->name('berita.show');
+
 // Alias Routes
 Route::get('/profil',     [PageController::class, 'selayangPandang'])->name('profil');
 Route::get('/unduhan',    [PageController::class, 'dokumen'])->name('unduhan');
@@ -40,9 +44,9 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login.post');
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
-    Route::middleware('auth')->group(function () {
+    Route::middleware(['auth', 'admin.nocache'])->group(function () {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-        
+
         // Kelola Dokumen (Files)
         Route::get('/dokumen',         [AdminDashboardController::class, 'indexDokumen'])->name('admin.dokumen.index');
         Route::post('/dokumen',        [AdminDashboardController::class, 'storeDokumen'])->name('admin.dokumen.store');
@@ -53,5 +57,14 @@ Route::prefix('admin')->group(function () {
         Route::post('/dokumentasi',        [AdminDashboardController::class, 'storeDokumentasi'])->name('admin.dokumentasi.store');
         Route::delete('/dokumentasi/{id}', [AdminDashboardController::class, 'deleteDokumentasi'])->name('admin.dokumentasi.delete');
         Route::put('/dokumentasi/{id}',    [AdminDashboardController::class, 'updateDokumentasi'])->name('admin.dokumentasi.update');
+
+        // Kelola Berita
+        Route::get('/berita',             [AdminDashboardController::class, 'indexBerita'])->name('admin.berita.index');
+        Route::get('/berita/tambah',      [AdminDashboardController::class, 'createBerita'])->name('admin.berita.create');
+        Route::post('/berita',            [AdminDashboardController::class, 'storeBerita'])->name('admin.berita.store');
+        Route::post('/berita/fetch-link', [AdminDashboardController::class, 'fetchBeritaLink'])->name('admin.berita.fetch-link');
+        Route::get('/berita/{id}/edit',   [AdminDashboardController::class, 'editBerita'])->name('admin.berita.edit');
+        Route::put('/berita/{id}',        [AdminDashboardController::class, 'updateBerita'])->name('admin.berita.update');
+        Route::delete('/berita/{id}',     [AdminDashboardController::class, 'deleteBerita'])->name('admin.berita.delete');
     });
 });
