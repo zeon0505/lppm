@@ -27,6 +27,7 @@
   .wr-page-title { font-size: 20px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0; }
   .wr-page-sub { font-size: 12px; color: #94a3b8; margin: 0 0 20px 0; }
   .err-box { background:#fef2f2; border:1px solid #fecaca; color:#b91c1c; padding:12px 16px; border-radius:12px; margin-bottom:16px; font-size:12px; }
+  .d-none { display: none !important; }
 </style>
 
 <p class="wr-page-title">Edit Berita</p>
@@ -39,7 +40,6 @@
 <form action="{{ route('admin.berita.update', $berita->id) }}" method="POST" enctype="multipart/form-data" id="beritaForm">
   @csrf
   @method('PUT')
-  <input type="hidden" name="foto_url_external" id="fotoUrlHidden" value="{{ old('foto_url_external') }}">
 
   <div class="wr-wrap">
 
@@ -84,23 +84,54 @@
 
         @php
           $currentImg = $berita->foto ? (\Illuminate\Support\Str::startsWith($berita->foto, ['http://', 'https://']) ? $berita->foto : asset($berita->foto)) : null;
+          $rawFotoUrl = (isset($berita) && \Illuminate\Support\Str::startsWith($berita->foto, ['http://', 'https://'])) ? $berita->foto : '';
         @endphp
-        @if($currentImg)
-          <img id="fotoPreview" class="wr-foto-preview" src="{{ $currentImg }}" alt="Foto">
-          <div class="wr-foto-placeholder" id="fotoPlaceholder" style="display:none;" onclick="document.getElementById('inputFoto').click()">
-        @else
-          <img id="fotoPreview" class="wr-foto-preview" src="" alt="Preview" style="display:none;">
-          <div class="wr-foto-placeholder" id="fotoPlaceholder" onclick="document.getElementById('inputFoto').click()">
-        @endif
-            <i class="fas fa-cloud-upload-alt" style="font-size:28px;"></i>
-            <span style="font-size:12px; font-weight:600;">Klik untuk ganti foto</span>
+
+        <!-- Pilihan 1: Tempel Link Gambar Langsung -->
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 5px;">
+            <i class="fas fa-link" style="color: #074e50;"></i> Tempel (Paste) Link URL Foto:
+          </label>
+          <div style="display: flex; gap: 8px;">
+            <input type="url" name="foto_url_external" id="fotoUrlHidden" class="wr-input"
+                   value="{{ old('foto_url_external', $rawFotoUrl) }}"
+                   placeholder="https://example.com/gambar-berita.jpg"
+                   oninput="handleUrlImage(this.value)">
+            <button type="button" onclick="previewFromUrlInput()" style="background: #074e50; color: #fff; border: none; padding: 0 16px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;">
+              <i class="fas fa-eye"></i> Tinjau
+            </button>
           </div>
+          <span style="font-size: 11px; color: #64748b; margin-top: 4px; display: block;">
+            Bisa copy-paste link foto langsung dari internet/website manapun (klik kanan foto &rarr; Copy image address).
+          </span>
+        </div>
+
+        <div style="position: relative; text-align: center; margin: 16px 0;">
+          <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 0;">
+          <span style="position: absolute; top: -8px; left: 50%; transform: translateX(-50%); background: #fff; padding: 0 10px; font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase;">
+            Atau Upload File Komputer
+          </span>
+        </div>
+
+        <!-- Pilihan 2: Upload File / Drag Drop -->
+        <div class="wr-foto-placeholder {{ $currentImg ? 'd-none' : '' }}" id="fotoPlaceholder" onclick="document.getElementById('inputFoto').click()">
+          <i class="fas fa-cloud-upload-alt" style="font-size:28px;"></i>
+          <span style="font-size:12px; font-weight:600;">Klik untuk upload file dari komputer</span>
+          <span style="font-size:11px;">JPG, PNG, WEBP – maks 5MB</span>
+        </div>
+        <img id="fotoPreview" class="wr-foto-preview {{ $currentImg ? '' : 'd-none' }}" src="{{ $currentImg ?? '' }}" alt="Foto">
         <input type="file" name="foto" id="inputFoto" accept="image/*" style="display:none;"
                onchange="previewFoto(this)">
-        <button type="button" onclick="document.getElementById('inputFoto').click()"
-                style="margin-top:8px; background:#f1f5f9; border:1px solid #e2e8f0; color:#334155; padding:7px 14px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">
-          <i class="fas fa-sync-alt"></i> Ganti Foto Manual
-        </button>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <button type="button" onclick="document.getElementById('inputFoto').click()"
+                  style="background:#f1f5f9; border:1px solid #e2e8f0; color:#334155; padding:7px 14px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">
+            <i class="fas fa-upload"></i> Pilih File Komputer
+          </button>
+          <button type="button" onclick="clearSelectedFoto()"
+                  style="background:#fef2f2; border:1px solid #fecaca; color:#dc2626; padding:7px 14px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">
+            <i class="fas fa-trash"></i> Hapus Foto
+          </button>
+        </div>
       </div>
     </div>
 
@@ -145,11 +176,39 @@
         const img = document.getElementById('fotoPreview');
         const ph  = document.getElementById('fotoPlaceholder');
         img.src = e.target.result;
-        img.style.display = 'block';
-        ph.style.display  = 'none';
+        img.classList.remove('d-none');
+        ph.classList.add('d-none');
       };
       reader.readAsDataURL(input.files[0]);
     }
+  }
+
+  function handleUrlImage(val) {
+    const trimmed = (val || '').trim();
+    if (trimmed && (trimmed.startsWith('http://') || trimmed.startsWith('https://'))) {
+      const img = document.getElementById('fotoPreview');
+      const ph  = document.getElementById('fotoPlaceholder');
+      img.src = trimmed;
+      img.classList.remove('d-none');
+      ph.classList.add('d-none');
+    }
+  }
+
+  function previewFromUrlInput() {
+    const val = document.getElementById('fotoUrlHidden').value;
+    handleUrlImage(val);
+  }
+
+  function clearSelectedFoto() {
+    const inputFoto = document.getElementById('inputFoto');
+    const inputUrl  = document.getElementById('fotoUrlHidden');
+    const img       = document.getElementById('fotoPreview');
+    const ph        = document.getElementById('fotoPlaceholder');
+    if (inputFoto) inputFoto.value = '';
+    if (inputUrl)  inputUrl.value = '';
+    img.src = '';
+    img.classList.add('d-none');
+    ph.classList.remove('d-none');
   }
 
   async function fetchLinkData() {

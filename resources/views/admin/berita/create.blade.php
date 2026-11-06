@@ -152,6 +152,7 @@
     background:#fef2f2; border:1px solid #fecaca; color:#b91c1c;
     padding:12px 16px; border-radius:12px; margin-bottom:16px; font-size:12px;
   }
+  .d-none { display: none !important; }
 </style>
 
 <p class="wr-page-title">Tulis Berita</p>
@@ -163,7 +164,6 @@
 
 <form action="{{ route('admin.berita.store') }}" method="POST" enctype="multipart/form-data" id="beritaForm">
   @csrf
-  <input type="hidden" name="foto_url_external" id="fotoUrlHidden" value="{{ old('foto_url_external') }}">
 
   <div class="wr-wrap">
 
@@ -208,18 +208,47 @@
       <div class="wr-card">
         <label class="wr-label"><i class="fas fa-image" style="margin-right:5px; color:#074e50;"></i> Gambar Berita <span style="color:#94a3b8;font-weight:500;">(opsional)</span></label>
 
-        <div class="wr-foto-placeholder" id="fotoPlaceholder" onclick="document.getElementById('inputFoto').click()">
+        <!-- Pilihan 1: Tempel Link Gambar Langsung -->
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 5px;">
+            <i class="fas fa-link" style="color: #074e50;"></i> Tempel (Paste) Link URL Foto:
+          </label>
+          <div style="display: flex; gap: 8px;">
+            <input type="url" name="foto_url_external" id="fotoUrlHidden" class="wr-input"
+                   value="{{ old('foto_url_external') }}"
+                   placeholder="https://example.com/gambar-berita.jpg"
+                   oninput="handleUrlImage(this.value)">
+            <button type="button" onclick="previewFromUrlInput()" style="background: #074e50; color: #fff; border: none; padding: 0 16px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;">
+              <i class="fas fa-eye"></i> Tinjau
+            </button>
+          </div>
+          <span style="font-size: 11px; color: #64748b; margin-top: 4px; display: block;">
+            Bisa copy-paste link foto langsung dari internet/website manapun (klik kanan foto &rarr; Copy image address).
+          </span>
+        </div>
+
+        <div style="position: relative; text-align: center; margin: 16px 0;">
+          <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 0;">
+          <span style="position: absolute; top: -8px; left: 50%; transform: translateX(-50%); background: #fff; padding: 0 10px; font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase;">
+            Atau Upload File Komputer
+          </span>
+        </div>
+
+        <!-- Pilihan 2: Upload File / Drag Drop -->
+        <div class="wr-foto-placeholder {{ old('foto_url_external') ? 'd-none' : '' }}" id="fotoPlaceholder" onclick="document.getElementById('inputFoto').click()">
           <i class="fas fa-cloud-upload-alt" style="font-size:28px;"></i>
-          <span style="font-size:12px; font-weight:600;">Klik untuk upload foto</span>
+          <span style="font-size:12px; font-weight:600;">Klik untuk upload foto dari komputer</span>
           <span style="font-size:11px;">JPG, PNG, WEBP – maks 5MB</span>
         </div>
-        <img id="fotoPreview" class="wr-foto-preview" src="" alt="Preview" style="display:none;">
+        <img id="fotoPreview" class="wr-foto-preview {{ old('foto_url_external') ? '' : 'd-none' }}" src="{{ old('foto_url_external') }}" alt="Preview">
         <input type="file" name="foto" id="inputFoto" accept="image/*" style="display:none;"
                onchange="previewFoto(this)">
 
-        @if(old('foto'))
-          <p style="font-size:11px;color:#059669;margin:0;"><i class="fas fa-check-circle"></i> Foto sudah dipilih</p>
-        @endif
+        <div id="btnGantiFotoWrap" class="{{ old('foto_url_external') ? '' : 'd-none' }}" style="margin-top: 8px;">
+          <button type="button" onclick="clearSelectedFoto()" style="background:#fef2f2; color:#dc2626; border:1px solid #fecaca; padding:6px 14px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">
+            <i class="fas fa-trash"></i> Hapus / Ganti Foto
+          </button>
+        </div>
       </div>
 
     </div>
@@ -258,16 +287,68 @@
 </form>
 
 <script>
-  // ── PREVIEW FOTO ──
+  // ── PREVIEW FOTO DARI FILE ──
   function previewFoto(input) {
     if (input.files && input.files[0]) {
       const reader = new FileReader();
       reader.onload = e => {
-        document.getElementById('fotoPreview').src = e.target.result;
-        document.getElementById('fotoPreview').style.display = 'block';
-        document.getElementById('fotoPlaceholder').style.display = 'none';
+        const img = document.getElementById('fotoPreview');
+        const ph  = document.getElementById('fotoPlaceholder');
+        const gantiBtn = document.getElementById('btnGantiFotoWrap');
+        img.src = e.target.result;
+        img.classList.remove('d-none');
+        img.style.display = 'block';
+        ph.classList.add('d-none');
+        ph.style.display  = 'none';
+        if (gantiBtn) {
+          gantiBtn.classList.remove('d-none');
+          gantiBtn.style.display = 'block';
+        }
       };
       reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  // ── PREVIEW FOTO DARI LINK URL ──
+  function handleUrlImage(val) {
+    const trimmed = (val || '').trim();
+    if (trimmed && (trimmed.startsWith('http://') || trimmed.startsWith('https://'))) {
+      const img = document.getElementById('fotoPreview');
+      const ph  = document.getElementById('fotoPlaceholder');
+      const gantiBtn = document.getElementById('btnGantiFotoWrap');
+      img.src = trimmed;
+      img.classList.remove('d-none');
+      img.style.display = 'block';
+      ph.classList.add('d-none');
+      ph.style.display  = 'none';
+      if (gantiBtn) {
+        gantiBtn.classList.remove('d-none');
+        gantiBtn.style.display = 'block';
+      }
+    }
+  }
+
+  function previewFromUrlInput() {
+    const val = document.getElementById('fotoUrlHidden').value;
+    handleUrlImage(val);
+  }
+
+  function clearSelectedFoto() {
+    const inputFoto = document.getElementById('inputFoto');
+    const inputUrl  = document.getElementById('fotoUrlHidden');
+    const img       = document.getElementById('fotoPreview');
+    const ph        = document.getElementById('fotoPlaceholder');
+    const gantiBtn  = document.getElementById('btnGantiFotoWrap');
+    if (inputFoto) inputFoto.value = '';
+    if (inputUrl)  inputUrl.value = '';
+    img.src = '';
+    img.classList.add('d-none');
+    img.style.display = 'none';
+    ph.classList.remove('d-none');
+    ph.style.display  = 'flex';
+    if (gantiBtn) {
+      gantiBtn.classList.add('d-none');
+      gantiBtn.style.display = 'none';
     }
   }
 

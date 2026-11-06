@@ -8,7 +8,7 @@
 @push('og-tags')
   @php
     $ogImage = $berita->foto
-      ? asset($berita->foto)
+      ? (\Illuminate\Support\Str::startsWith($berita->foto, ['http://', 'https://']) ? $berita->foto : asset($berita->foto))
       : 'https://www.staimaswonogiri.ac.id/assest/LOGO%20STAIMAS%20AI.png';
     $ogDesc = $berita->ringkasan
       ? $berita->ringkasan
@@ -143,7 +143,7 @@
   }
   .bd-prevnext-item:hover { background: #f8fafc; border-color: #074e50; }
   .bd-prevnext-label { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px; }
-  .bd-prevnext-title { font-size: 12px; font-weight: 700; color: #074e50; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .bd-prevnext-title { font-size: 12px; font-weight: 700; color: #074e50; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .bd-prevnext-empty { font-size: 12px; color: #cbd5e1; display: flex; align-items: center; height: 100%; }
 
   /* ── Share bar ── */
@@ -187,7 +187,6 @@
   .share-tw { background: #000; }
 
   /* ── Sidebar ── */
-  .bd-sidebar {}
   .bd-sidebar-card {
     background: #fff;
     border: 1px solid #e9edf2;
@@ -235,9 +234,8 @@
   }
   .bs-thumb img { width: 100%; height: 100%; object-fit: cover; }
   .bs-thumb-ph { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f0fdf4; }
-  .bs-info {}
   .bs-date { font-size: 10px; color: #94a3b8; display: block; margin-bottom: 3px; }
-  .bs-title { font-size: 11px; font-weight: 700; color: #0f172a; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; transition: color 0.2s; }
+  .bs-title { font-size: 11px; font-weight: 700; color: #0f172a; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; transition: color 0.2s; }
 </style>
 
 <div class="bd-outer">
@@ -259,8 +257,11 @@
 
         {{-- Cover Image --}}
         <div class="bd-cover-wrap">
-          @if($berita->foto)
-            <img src="{{ asset($berita->foto) }}" alt="{{ $berita->judul }}">
+          @php
+            $mainImg = $berita->foto ? (\Illuminate\Support\Str::startsWith($berita->foto, ['http://', 'https://']) ? $berita->foto : asset($berita->foto)) : null;
+          @endphp
+          @if($mainImg)
+            <img src="{{ $mainImg }}" alt="{{ $berita->judul }}">
           @else
             <div class="bd-cover-placeholder">
               <i class="fas fa-newspaper" style="font-size:56px; color:#a7f3d0;"></i>
@@ -355,9 +356,12 @@
         <h3 class="bd-sidebar-heading">Berita Terkait</h3>
         @foreach($lainnya as $b)
           <a href="{{ route('berita.show', $b->slug) }}" class="bs-item">
+            @php
+              $sideImg = $b->foto ? (\Illuminate\Support\Str::startsWith($b->foto, ['http://', 'https://']) ? $b->foto : asset($b->foto)) : null;
+            @endphp
             <div class="bs-thumb">
-              @if($b->foto)
-                <img src="{{ asset($b->foto) }}" alt="{{ $b->judul }}">
+              @if($sideImg)
+                <img src="{{ $sideImg }}" alt="{{ $b->judul }}">
               @else
                 <div class="bs-thumb-ph"><i class="fas fa-newspaper" style="font-size:18px; color:#a7f3d0;"></i></div>
               @endif
