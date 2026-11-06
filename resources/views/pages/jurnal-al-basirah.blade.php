@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Jurnal Al-Basirah – LPPM STAIMAS Wonogiri')
 @section('hero-title', 'Jurnal Al-Basirah')
@@ -34,7 +34,7 @@
         <p style="margin: 0 0 16px 0; color: #64748b; font-size: 13px; font-family: monospace;">
           <i class="fas fa-id-card" style="margin-right: 6px; color: #074e50;"></i>NUPTK. 7953776677130262
         </p>
-        <a href="{{ asset('assest/SK TIM JURNAL.pdf') }}" download target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: #074e50; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 13px; text-decoration: none; box-shadow: 0 3px 8px rgba(7,78,80,0.25);">
+        <a href="{{ asset('assest/SK  EDITORIAL Al-Basirah (1).pdf') }}" download target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: #074e50; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 13px; text-decoration: none; box-shadow: 0 3px 8px rgba(7,78,80,0.25);">
           <i class="fas fa-file-download"></i> Download SK Pengelola
         </a>
       </div>

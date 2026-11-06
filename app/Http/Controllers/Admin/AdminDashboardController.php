@@ -140,4 +140,20 @@ class AdminDashboardController extends Controller
 
         return back()->with('success', 'Foto dokumentasi "' . $judul . '" berhasil dihapus.');
     }
+
+    public function updateDokumentasi(Request $request, $id)
+    {
+        $request->validate([
+            'judul'    => 'required|string|max:255',
+            'kategori' => 'required|string|max:100',
+        ]);
+
+        $dok = Dokumentasi::findOrFail($id);
+        $dok->update([
+            'judul'    => $request->judul,
+            'kategori' => $request->kategori,
+        ]);
+
+        return back()->with('success', 'Nama foto "' . $request->judul . '" berhasil diperbarui.');
+    }
 }

@@ -52,5 +52,6 @@ Route::prefix('admin')->group(function () {
         Route::get('/dokumentasi',         [AdminDashboardController::class, 'indexDokumentasi'])->name('admin.dokumentasi.index');
         Route::post('/dokumentasi',        [AdminDashboardController::class, 'storeDokumentasi'])->name('admin.dokumentasi.store');
         Route::delete('/dokumentasi/{id}', [AdminDashboardController::class, 'deleteDokumentasi'])->name('admin.dokumentasi.delete');
+        Route::put('/dokumentasi/{id}',    [AdminDashboardController::class, 'updateDokumentasi'])->name('admin.dokumentasi.update');
     });
 });

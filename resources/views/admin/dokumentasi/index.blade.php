@@ -198,7 +198,10 @@
                 @endif
               </div>
 
-              <div style="margin-top: 12px; pt: 8px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end;">
+              <div style="margin-top: 12px; border-top: 1px solid #e2e8f0; padding-top: 8px; display: flex; justify-content: space-between; gap: 6px;">
+                <button type="button" onclick="openEditModal({{ $dok->id }}, '{{ addslashes($dok->judul) }}', '{{ addslashes($dok->kategori) }}')" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; cursor: pointer;">
+                  <i class="fas fa-edit"></i> Edit Nama
+                </button>
                 <form action="{{ route('admin.dokumentasi.delete', $dok->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus foto ini?')">
                   @csrf
                   @method('DELETE')
@@ -216,7 +219,52 @@
 
 </div>
 
+{{-- MODAL EDIT NAMA --}}
+<div id="editModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:16px; padding:28px; width:100%; max-width:400px; margin:16px; box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+    <h3 style="margin:0 0 16px 0; font-size:15px; font-weight:800; color:#074e50;"><i class="fas fa-edit"></i> Edit Nama Foto</h3>
+    <form id="editForm" method="POST">
+      @csrf
+      @method('PUT')
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-size:12px; font-weight:700; color:#334155; margin-bottom:6px;">Judul / Nama Foto</label>
+        <input type="text" name="judul" id="editJudul" required style="width:100%; padding:10px 14px; font-size:12px; border-radius:10px; border:1px solid #cbd5e1; outline:none; box-sizing:border-box;">
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="display:block; font-size:12px; font-weight:700; color:#334155; margin-bottom:6px;">Kategori</label>
+        <select name="kategori" id="editKategori" style="width:100%; padding:10px 14px; font-size:12px; border-radius:10px; border:1px solid #cbd5e1; outline:none;">
+          <option value="Kegiatan LPPM">Kegiatan LPPM</option>
+          <option value="Penelitian Dosen">Penelitian Dosen</option>
+          <option value="Pengabdian Masyarakat">Pengabdian Masyarakat</option>
+          <option value="Workshop & Seminar">Workshop & Seminar</option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:8px; justify-content:flex-end;">
+        <button type="button" onclick="closeEditModal()" style="background:#f1f5f9; color:#334155; border:1px solid #e2e8f0; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer;">Batal</button>
+        <button type="submit" style="background:#074e50; color:white; border:none; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer;"><i class="fas fa-save"></i> Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
+  function openEditModal(id, judul, kategori) {
+    document.getElementById('editForm').action = '/admin/dokumentasi/' + id;
+    document.getElementById('editJudul').value = judul;
+    const sel = document.getElementById('editKategori');
+    for (let i = 0; i < sel.options.length; i++) {
+      sel.options[i].selected = sel.options[i].value === kategori;
+    }
+    document.getElementById('editModal').style.display = 'flex';
+  }
+  function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+  }
+  document.getElementById('editModal').addEventListener('click', function(e) {
+    if (e.target === this) closeEditModal();
+  });
+
   function toggleUploadSource(type) {
     const fileDiv = document.getElementById('sourceFileInput');
     const urlDiv = document.getElementById('sourceUrlInput');
